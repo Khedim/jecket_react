@@ -1,3 +1,14 @@
+*{
+  box-sizing: border-box !important;
+}
+.container {
+  min-height: calc(100vh - 176px);
+}
+@media (min-width:992px) {
+  .container {
+    min-height: calc(100vh - 194px);
+  }
+}
 .nav-item {
   margin: 10px;
 }

@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { setToken } from "../states/cartSlicer";
 
 export const LogIn = () => {
   const [formData, setFormData] = useState({
@@ -9,7 +11,9 @@ export const LogIn = () => {
   });
   const [formErrors, setFormErrors] = useState([]);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,38 +22,53 @@ export const LogIn = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    axios.defaults.headers.common["Authorization"] = "";
+
+    localStorage.removeItem("token");
+
     setFormErrors([]);
-    if (formData.username === '') {
-        setFormErrors(pre => [...pre, 'The username is missing'])
+    if (formData.username === "") {
+      setFormErrors((pre) => [...pre, "The username is missing"]);
     }
     if (formData.password.length < 8) {
-        setFormErrors(pre => [...pre, 'Password is too short'])
+      setFormErrors((pre) => [...pre, "Password is too short"]);
     }
     if (!formErrors.length) {
-        axios
-            .post('users/', formData)
-            .then(res => {
-                navigate('/')
-            })
-            .catch(err => {
-                if (err.response) {
-                    for (const property in err.response.data) {
-                        setFormErrors(pre => [...pre, `${property}: ${err.response.data[property]}`])
-                    }
-                    console.log(JSON.stringify(err.response.data))
-                }else if (err.message) {
-                    setFormErrors(pre => [...pre, 'Something went wrong. Please try again'])
-                    console.log(JSON.stringify(err))
-                }
-            })
+      await axios
+        .post("token/login/", formData)
+        .then((res) => {
+          const token = res.data.auth_token;
+          dispatch(setToken(token));
+          axios.defaults.headers.common["Authorization"] = "Token" + token;
+          localStorage.setItem("token", token);
+          navigate("/cart");
+        })
+        .catch((err) => {
+          if (err.response) {
+            for (const property in err.response.data) {
+              setFormErrors((pre) => [
+                ...pre,
+                `${property}: ${err.response.data[property]}`,
+              ]);
+            }
+            console.log(JSON.stringify(err.response.data));
+          } else if (err.message) {
+            setFormErrors((pre) => [
+              ...pre,
+              "Something went wrong. Please try again",
+            ]);
+            console.log(JSON.stringify(err));
+          }
+        });
     }
   };
 
   useEffect(() => {
-    document.title = `Log in | Jacket`
-  }, [])
+    document.title = `Log in | Jacket`;
+  }, []);
 
   return (
     <div className="container p-4 mb-5">

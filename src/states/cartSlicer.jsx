@@ -6,9 +6,8 @@ export const cartSilcer = createSlice({
     cart: {
       items: JSON.parse(localStorage.getItem("cartItems")) || [],
     },
-    isAuthenticated: false,
-    token: "",
-    isLoading: false,
+    isAuthenticated: localStorage.getItem('token') ? true : false,
+    token: localStorage.getItem('token') || "",
   },
   reducers: {
     addToCart: (state, action) => {
@@ -31,8 +30,16 @@ export const cartSilcer = createSlice({
       );
       localStorage.setItem("cartItems", JSON.stringify(state.cart.items));
     },
+    setToken: (state, action) => {
+      state.token = action.payload
+      state.isAuthenticated = true
+    },
+    removeToken: (state) => {
+      state.token = ''
+      state.isAuthenticated = false
+    },
   },
 });
 
-export const { addToCart, minus, removeFromCart } = cartSilcer.actions;
+export const { addToCart, minus, removeFromCart, setToken, removeToken } = cartSilcer.actions;
 export default cartSilcer.reducer;

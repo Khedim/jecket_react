@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet } from "react-router-dom";
 
 export const RootLayout = () => {
   const cart = useSelector((state) => state.cart.cart.items);
+  const {token} = useSelector(state => state.cart)
 
   return (
     <div className="App">
@@ -24,9 +25,11 @@ export const RootLayout = () => {
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <div className="navbar-nav me-auto mb-2 mb-lg-0">
-              <form action="/search" method="get" className="search-query" >
+              <form action="/search" method="get" className="search-query">
                 <input type="text" placeholder="Search products" name="query" />
-                <button><i className="fa-solid fa-magnifying-glass"></i></button>
+                <button>
+                  <i className="fa-solid fa-magnifying-glass"></i>
+                </button>
               </form>
             </div>
             <div className="d-flex">
@@ -38,15 +41,27 @@ export const RootLayout = () => {
                   <NavLink to="/products/winter">Winter</NavLink>
                 </li>
                 <li className="nav-item btn btn-light">
-                  <NavLink to="about" className="text-dark">
-                    Login
-                  </NavLink>
+                  {token !== "" ? (
+                    <NavLink to="/account" className="text-dark">
+                      Profile
+                    </NavLink>
+                  ) : (
+                    <NavLink to="/log-in" className="text-dark">
+                      Login
+                    </NavLink>
+                  )}
                 </li>
                 <li className="nav-item btn btn-success">
-                  <NavLink to="/cart">
-                    <i className="fa-solid fa-cart-shopping"></i> Cart (
-                    {cart.length})
-                  </NavLink>
+                  {token !== "" ? (
+                    <NavLink to="/cart">
+                      <i className="fa-solid fa-cart-shopping"></i> Cart (
+                      {cart.length})
+                    </NavLink>
+                  ) : (
+                    <NavLink to="/sign-up" className="text-light">
+                      Sign up
+                    </NavLink>
+                  )}
                 </li>
               </ul>
             </div>

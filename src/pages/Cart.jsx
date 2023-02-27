@@ -7,6 +7,8 @@ export const Cart = () => {
   const cart = useSelector((state) => state.cart.cart.items);
   const dispatch = useDispatch();
 
+  console.log(cart)
+
   const handleDelete = (item, isTrue) => {
     if (isTrue || item.quantity === 1) {
       Swal.fire({
