@@ -11,28 +11,34 @@ import { LogIn } from "./pages/LogIn";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { MyAcount } from "./pages/MyAccount";
+import { Checkout } from "./pages/Checkout";
+import { Dash } from "./pages/Dash";
 import { ProtectedRoutes } from "./components/ProtectedRoutes";
 
 const router = createBrowserRouter(
-  createRoutesFromElements(
+  createRoutesFromElements(<>
     <Route path="/" element={<RootLayout />}>
       <Route index element={<Home />} />
       <Route path="/search" element={<Search />} />
       <Route element={<ProtectedRoutes />}>
         <Route path="/cart" element={<Cart />} />
         <Route path="/account" element={<MyAcount />} />
+        <Route path="/cart/checkout" element={<Checkout />} />
       </Route>
       <Route path="/sign-up" element={<SignUp />} />
       <Route path="/log-in" element={<LogIn />} />
       <Route path="/products/:category_slug" element={<Category />} />
       <Route path="/products/:category_slug/:product_slug" element={<ProductDetail />} />
     </Route>
+    <Route path="/admin">
+      <Route index element={<Dash />} />
+    </Route>
+    </>
   )
 )
 
 function App() {
   const {token} = useSelector(state => state.cart)
-  console.log(token)
 
   if (token) {
     axios.defaults.headers.common['Authorization'] = "Token " + token

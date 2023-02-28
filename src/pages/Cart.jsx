@@ -95,7 +95,7 @@ export const Cart = () => {
                       -
                     </span>
                   </td>
-                  <td>{(item.quantity * item.price).toFixed(2)}</td>
+                  <td>${(item.quantity * item.price).toFixed(2)}</td>
                   <td>
                     <button
                       className="bg-danger text-light border-0 rounded-circle pl-3 pr-3"
@@ -114,7 +114,7 @@ export const Cart = () => {
               <strong>${totalCart.toFixed(2)} ;</strong> {totalItems} items
             </p>
             <hr />
-            <div className="btn btn-dark">Proceed to checkout</div>
+            <Link to="/cart/checkout" className="btn btn-dark">Proceed to checkout</Link>
           </div>
         </>
       )}
