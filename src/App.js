@@ -14,6 +14,7 @@ import { MyAcount } from "./pages/MyAccount";
 import { Checkout } from "./pages/Checkout";
 import { Dash } from "./pages/Dash";
 import { ProtectedRoutes } from "./components/ProtectedRoutes";
+import { Success } from "./pages/Success";
 
 const router = createBrowserRouter(
   createRoutesFromElements(<>
@@ -24,6 +25,7 @@ const router = createBrowserRouter(
         <Route path="/cart" element={<Cart />} />
         <Route path="/account" element={<MyAcount />} />
         <Route path="/cart/checkout" element={<Checkout />} />
+        <Route path="/cart/success" element={<Success />} />
       </Route>
       <Route path="/sign-up" element={<SignUp />} />
       <Route path="/log-in" element={<LogIn />} />

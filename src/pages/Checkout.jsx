@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { Link } from "react-router-dom";
 
 export const Checkout = () => {
   const cart = useSelector((state) => state.cart.cart.items);
@@ -13,11 +12,9 @@ export const Checkout = () => {
     phone: "",
     address: "",
     zipCode: "",
+    place: "",
   });
-
   const [formErrors, setFormErrors] = useState([]);
-
-  const navigate = useNavigate();
 
   const totalCart = cart.reduce((ac, cur) => {
     return (ac += cur.quantity * cur.price);
@@ -56,28 +53,7 @@ export const Checkout = () => {
       setFormErrors((pre) => [...pre, "The zip code is missing"]);
     }
     if (!formErrors.length) {
-      axios
-        .post("users/", formData)
-        .then((res) => {
-          navigate("/log-in");
-        })
-        .catch((err) => {
-          if (err.response) {
-            for (const property in err.response.data) {
-              setFormErrors((pre) => [
-                ...pre,
-                `${property}: ${err.response.data[property]}`,
-              ]);
-            }
-            console.log(JSON.stringify(err.response.data));
-          } else if (err.message) {
-            setFormErrors((pre) => [
-              ...pre,
-              "Something went wrong. Please try again",
-            ]);
-            console.log(JSON.stringify(err));
-          }
-        });
+          // proceed to stripe payment
     }
   };
 
@@ -175,8 +151,6 @@ export const Checkout = () => {
                     onChange={handleChange}
                   />
                 </div>
-              </div>
-              <div className="col-md-6">
                 <div className="mb-3">
                   <label htmlFor="phone" className="form-label">
                     Phone*
@@ -191,6 +165,8 @@ export const Checkout = () => {
                     onChange={handleChange}
                   />
                 </div>
+              </div>
+              <div className="col-md-6">
                 <div className="mb-3">
                   <label htmlFor="address" className="form-label">
                     Address*
@@ -219,6 +195,20 @@ export const Checkout = () => {
                     onChange={handleChange}
                   />
                 </div>
+                <div className="mb-3">
+                  <label htmlFor="zip-code" className="form-label">
+                    Place*
+                  </label>
+                  <input
+                    type="text"
+                    name="place"
+                    className="form-control"
+                    id="place"
+                    placeholder="Place"
+                    value={formData.place}
+                    onChange={handleChange}
+                  />
+                </div>
               </div>
               {formErrors.length > 0 && (
                 <div className="bg-danger bg-opacity-25 p-1 text-danger border border-danger rounded mb-3 ps-3">
@@ -229,6 +219,8 @@ export const Checkout = () => {
                   ))}
                 </div>
               )}
+              <div id="card-element" className="mb-2"></div>
+              <hr />
               <button className="btn btn-dark mt-2 col-4 col-md-3">
                 Pay with stripe
               </button>

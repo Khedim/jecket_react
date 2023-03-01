@@ -10,7 +10,7 @@ export const Home = () => {
   useEffect(() => {
     dispatch(fetchProducts());
     document.title = `Home | Jacket`
-  }, []);
+  }, [dispatch]);
 
   return (
     <div>

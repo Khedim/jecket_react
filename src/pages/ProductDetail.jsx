@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addToCart } from "../states/cartSlicer";
 
 export const ProductDetail = () => {
@@ -37,7 +37,7 @@ export const ProductDetail = () => {
       }
     };
     fetchProduct();
-  }, []);
+  }, [category_slug, product_slug]);
 
   useEffect(() => {
     document.title = `${product.name} | Jacket`;
